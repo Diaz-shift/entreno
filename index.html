@@ -6,262 +6,359 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Entreno">
-<meta name="theme-color" content="#F4F3EF" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#131312" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#EFECE6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151412" media="(prefers-color-scheme: dark)">
 <title>Entreno</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300..700&display=swap">
 <style>
   /* Página de entrenamiento de Daniel. Datos en su Google Sheet "Entrenamiento" vía Apps Script.
      Él diseña las sesiones; la página organiza semana, carga y registro.
-     Colores de tipo de sesión: paleta categórica validada (skill dataviz), en orden fijo. */
+     Estética (referencias de Daniel, 11 oct 2026): crema cálido, tarjetas de vidrio sobre manchas
+     difusas, píldoras negras, naranja solo para "hoy" y lo que pide atención, etiquetas en mono.
+     Colores de tipo de sesión: paleta categórica validada (skill dataviz), en orden fijo,
+     siempre acompañados de ícono y nombre. */
   :root {
-    --bg:#F4F3EF; --surface:#FCFCFB; --surface-2:#ECEBE6; --hair:rgba(11,11,11,.10);
-    --ink:#0B0B0B; --ink-2:#52514E; --muted:#7D7C77;
-    --btn:#0B0B0B; --on-btn:#FFFFFF;
+    --bg:#EFECE6; --glass:rgba(255,255,255,.62); --glass-2:rgba(255,255,255,.85); --track:#E2DED7;
+    --hair:rgba(20,18,15,.08); --shadow:0 1px 2px rgba(40,30,20,.04), 0 8px 24px rgba(40,30,20,.06);
+    --ink:#141210; --ink-2:#5C5852; --muted:#9A958D;
+    --pill:#141210; --on-pill:#FFFFFF;
+    --accent:#E8643C; --accent-soft:rgba(232,100,60,.14); --on-accent:#FFFFFF;
+    --blob1:#F08A4B; --blob2:#F2C14E; --blob3:#6FA8E8;
     --t1:#2a78d6; --t2:#eb6834; --t3:#1baf7a; --t4:#eda100; --t5:#e87ba4; --t6:#008300;
-    --good:#0ca30c; --warn:#B07800; --crit:#d03b3b;
-    --block:#FCEBD9; --block-ink:#8A3B12;
-    --display:"Barlow Condensed", "Arial Narrow", -apple-system, sans-serif;
-    --font:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
-    --r:16px; --r-sm:10px;
+    --good:#0ca30c; --crit:#d03b3b;
+    --sans:"DM Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    --mono:"DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --r:28px; --r-md:20px; --r-sm:14px;
     color-scheme:light;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg:#131312; --surface:#1a1a19; --surface-2:#262624; --hair:rgba(255,255,255,.10);
-      --ink:#FFFFFF; --ink-2:#C3C2B7; --muted:#8E8D86;
-      --btn:#FFFFFF; --on-btn:#0B0B0B;
+      --bg:#151412; --glass:rgba(255,255,255,.06); --glass-2:rgba(38,36,33,.92); --track:#2C2A27;
+      --hair:rgba(255,255,255,.08); --shadow:0 1px 2px rgba(0,0,0,.3);
+      --ink:#F5F2EC; --ink-2:#C4BFB6; --muted:#8B867E;
+      --pill:#F5F2EC; --on-pill:#141210;
+      --accent:#F07850; --accent-soft:rgba(240,120,80,.18);
+      --blob1:#9A3F1C; --blob2:#7A5A12; --blob3:#1E4A7A;
       --t1:#3987e5; --t2:#d95926; --t3:#199e70; --t4:#c98500; --t5:#d55181; --t6:#008300;
-      --warn:#F0AE45; --crit:#FF6F6F;
-      --block:#3A2414; --block-ink:#F6B98F;
+      --crit:#FF6F6F;
       color-scheme:dark;
     }
   }
   :root[data-theme="dark"] {
-    --bg:#131312; --surface:#1a1a19; --surface-2:#262624; --hair:rgba(255,255,255,.10);
-    --ink:#FFFFFF; --ink-2:#C3C2B7; --muted:#8E8D86;
-    --btn:#FFFFFF; --on-btn:#0B0B0B;
+    --bg:#151412; --glass:rgba(255,255,255,.06); --glass-2:rgba(38,36,33,.92); --track:#2C2A27;
+    --hair:rgba(255,255,255,.08); --shadow:0 1px 2px rgba(0,0,0,.3);
+    --ink:#F5F2EC; --ink-2:#C4BFB6; --muted:#8B867E;
+    --pill:#F5F2EC; --on-pill:#141210;
+    --accent:#F07850; --accent-soft:rgba(240,120,80,.18);
+    --blob1:#9A3F1C; --blob2:#7A5A12; --blob3:#1E4A7A;
     --t1:#3987e5; --t2:#d95926; --t3:#199e70; --t4:#c98500; --t5:#d55181; --t6:#008300;
-    --warn:#F0AE45; --crit:#FF6F6F;
-    --block:#3A2414; --block-ink:#F6B98F;
+    --crit:#FF6F6F;
     color-scheme:dark;
   }
 
   * { box-sizing:border-box; }
   html, body { margin:0; }
   body {
-    background:var(--bg); color:var(--ink); font-family:var(--font); font-size:15px; line-height:1.4;
+    background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.4;
     -webkit-font-smoothing:antialiased; font-variant-numeric:tabular-nums;
-    padding:0 16px calc(88px + env(safe-area-inset-bottom));
+    padding:0 16px calc(104px + env(safe-area-inset-bottom)); min-height:100vh; overflow-x:hidden;
   }
-  main { max-width:760px; margin:0 auto; }
+  /* Manchas difusas de fondo */
+  .blobs { position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden; }
+  .blobs i { position:absolute; border-radius:50%; filter:blur(60px); opacity:.55; }
+  .blobs i:nth-child(1) { width:340px; height:340px; background:var(--blob1); top:-120px; right:-110px; }
+  .blobs i:nth-child(2) { width:260px; height:260px; background:var(--blob2); top:38vh; left:-150px; opacity:.35; }
+  .blobs i:nth-child(3) { width:300px; height:300px; background:var(--blob3); bottom:-140px; right:-120px; opacity:.25; }
+
+  main { max-width:720px; margin:0 auto; }
   button, input, select, textarea { font:inherit; color:inherit; }
-  button { cursor:pointer; }
-  h1, h2, h3 { font-family:var(--display); font-weight:700; letter-spacing:.01em; margin:0; line-height:1.05; }
+  button { cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  h1, h2, h3 { margin:0; font-weight:400; letter-spacing:-.02em; line-height:1; }
+  .mono { font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2); }
+  .card { background:var(--glass); -webkit-backdrop-filter:blur(24px) saturate(1.2); backdrop-filter:blur(24px) saturate(1.2);
+          border:1px solid var(--hair); border-radius:var(--r); box-shadow:var(--shadow); }
+  svg.i { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex:none; }
 
-  header.top { display:flex; align-items:center; justify-content:space-between; padding:18px 0 10px; gap:12px; }
-  header.top h1 { font-size:30px; text-transform:uppercase; }
-  .estado { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; text-align:right; }
-  .estado i { width:8px; height:8px; border-radius:50%; background:var(--good); flex:none; }
-  .estado.pend i { background:var(--warn); }
+  header.top { display:flex; align-items:center; justify-content:space-between; padding:20px 2px 6px; }
+  .estado { display:flex; align-items:center; gap:7px; }
+  .estado i { width:7px; height:7px; border-radius:50%; background:var(--good); }
+  .estado.pend i { background:var(--accent); }
   .estado.error i { background:var(--crit); }
-
   .vista[hidden] { display:none; }
 
-  /* Navegación de semana */
-  .semnav { display:flex; align-items:center; gap:8px; margin:6px 0 14px; }
-  .semnav h2 { font-size:24px; flex:1; text-transform:uppercase; }
-  .ico { width:40px; height:40px; border-radius:12px; border:1px solid var(--hair); background:var(--surface); display:grid; place-items:center; font-size:18px; }
-  .chip-btn { height:40px; padding:0 14px; border-radius:12px; border:1px solid var(--hair); background:var(--surface); font-size:14px; }
+  /* Héroe de la semana */
+  .heroe { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:14px 2px 18px; }
+  .heroe h1 { font-size:52px; font-weight:400; }
+  .heroe h1 span { display:block; color:var(--muted); font-weight:300; font-size:30px; margin-top:6px; letter-spacing:-.01em; }
+  .nav { display:flex; gap:6px; }
+  .circ { width:44px; height:44px; border-radius:50%; border:1px solid var(--hair); background:var(--glass-2); display:grid; place-items:center; }
+  .pildora { height:44px; padding:0 16px; border-radius:22px; border:0; background:var(--pill); color:var(--on-pill); font-weight:500; }
 
-  .stats { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; }
-  .stat { background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:10px 12px; min-width:0; }
-  .stat b { display:block; font-family:var(--display); font-size:28px; line-height:1; }
-  .stat span { font-size:12px; color:var(--muted); display:block; margin-top:4px; }
-  .stat small { font-size:12px; color:var(--ink-2); }
-  @media (max-width:520px) { .stats { grid-template-columns:repeat(2, 1fr); } }
+  /* Tira de días */
+  .tira { display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin-bottom:12px; text-align:center; }
+  .tira .l { font-family:var(--mono); font-size:10px; color:var(--muted); margin-bottom:6px; }
+  .tira button { width:100%; aspect-ratio:1; max-width:48px; border-radius:50%; border:0; background:var(--track); color:var(--ink-2); font-size:14px; font-weight:500; position:relative; }
+  .tira button.plan { background:var(--glass-2); box-shadow:inset 0 0 0 1.5px var(--ink); color:var(--ink); }
+  .tira button.hecha { background:var(--pill); color:var(--on-pill); }
+  .tira button.hoy { background:var(--accent); color:var(--on-accent); box-shadow:none; }
+  .tira button.bq::after { content:""; position:absolute; width:5px; height:5px; border-radius:50%; background:var(--accent); bottom:-9px; left:50%; margin-left:-2.5px; }
+  .tira button.hoy.bq::after { background:var(--ink); }
 
-  .foco { display:flex; gap:8px; margin:10px 0 16px; align-items:center; }
-  .foco input { flex:1; min-width:0; height:42px; border-radius:12px; border:1px solid var(--hair); background:var(--surface); padding:0 12px; }
-  .foco select { height:42px; border-radius:12px; border:1px solid var(--hair); background:var(--surface); padding:0 8px; }
+  /* Tarjetas de números */
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .grid .ancha { grid-column:1 / -1; }
+  .kpi { padding:18px 20px; display:flex; gap:16px; align-items:stretch; }
+  .kpi .izq { flex:1; display:flex; flex-direction:column; }
+  .kpi .big { font-size:54px; font-weight:500; letter-spacing:-.04em; line-height:1; margin-top:14px; }
+  .kpi .big small { font-size:15px; font-weight:400; letter-spacing:0; color:var(--ink-2); margin-left:4px; }
+  .kpi .delta { margin-top:auto; padding-top:12px; font-size:13px; color:var(--ink-2); }
+  .kpi .delta b { color:var(--accent); font-weight:500; }
+  .barras { display:flex; gap:7px; align-items:flex-end; }
+  .barras .col { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .barras .pista { width:12px; height:96px; border-radius:6px; background:var(--track); position:relative; overflow:hidden; }
+  .barras .pista i { position:absolute; left:0; right:0; bottom:0; border-radius:6px; background:var(--muted); }
+  .barras .pista i.hecha { background:var(--ink); }
+  .barras .pista i.hoy { background:var(--accent); }
+  .barras .col span { font-family:var(--mono); font-size:10px; color:var(--ink-2); }
+  .anillo { padding:16px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .anillo svg { width:112px; height:112px; margin:10px 0 6px; }
+  .anillo .sub { font-size:13px; color:var(--ink-2); }
+  .anillo .sub b { color:var(--accent); font-weight:500; }
+  .lineas { padding:16px 18px; display:flex; flex-direction:column; justify-content:space-around; gap:12px; }
+  .linea .fila { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .linea .v { font-family:var(--mono); font-size:12px; color:var(--ink); }
+  .linea .mono { white-space:nowrap; font-size:10px; }
+  .linea .riel { height:3px; border-radius:2px; background:var(--track); margin-top:8px; overflow:hidden; }
+  .linea .riel i { display:block; height:100%; background:var(--ink); border-radius:2px; }
 
-  .dia { background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:12px; margin-bottom:10px; }
-  .dia.hoy { box-shadow:0 0 0 2px var(--ink); border-color:transparent; }
-  .dia-cab { display:flex; align-items:baseline; gap:8px; }
-  .dia-cab h3 { font-size:20px; text-transform:uppercase; }
-  .dia-cab .fecha { color:var(--muted); font-size:13px; }
-  .dia-cab .mas { margin-left:auto; border:0; background:var(--surface-2); border-radius:10px; height:32px; padding:0 12px; font-size:13px; }
-  .clase { font-size:12px; color:var(--ink-2); margin-top:4px; }
-  .bloqueo { display:inline-block; margin-top:6px; font-size:12px; font-weight:600; background:var(--block); color:var(--block-ink); padding:3px 8px; border-radius:8px; }
-  .ses { display:flex; gap:10px; align-items:flex-start; width:100%; text-align:left; border:0; background:var(--surface-2); border-radius:var(--r-sm); padding:10px; margin-top:8px; }
-  .ses .barra { width:4px; align-self:stretch; border-radius:4px; flex:none; }
+  .foco { display:flex; gap:8px; margin:12px 0 22px; }
+  .foco input { flex:1; min-width:0; height:48px; border-radius:24px; border:1px solid var(--hair); background:var(--glass-2); padding:0 18px; }
+  .foco select { height:48px; border-radius:24px; border:1px solid var(--hair); background-color:var(--glass-2); padding:0 34px 0 16px; }
+
+  /* Días */
+  .dia { padding:18px; margin-bottom:10px; scroll-margin-top:16px; }
+  .dia.hoy { box-shadow:0 0 0 2px var(--accent), var(--shadow); }
+  .dia-cab { display:flex; align-items:center; gap:10px; }
+  .dia-cab h3 { font-size:30px; }
+  .dia-cab h3 span { color:var(--muted); font-weight:300; margin-left:6px; }
+  .dia-cab .circ { margin-left:auto; width:38px; height:38px; font-size:20px; line-height:1; }
+  .clase { margin-top:8px; }
+  .bloqueo { display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-size:13px; font-weight:500; background:var(--accent-soft); color:var(--ink); padding:6px 12px; border-radius:999px; }
+  .bloqueo::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .ses { display:flex; gap:12px; align-items:center; width:100%; text-align:left; border:0; background:var(--glass-2); border-radius:var(--r-md); padding:12px; margin-top:10px; box-shadow:0 0 0 1px var(--hair); }
+  .ses .ic { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; flex:none; }
   .ses .cuerpo { flex:1; min-width:0; }
-  .ses .t { font-weight:600; }
-  .ses .m { font-size:12px; color:var(--ink-2); margin-top:2px; }
-  .ses .e { font-size:12px; white-space:nowrap; color:var(--muted); }
-  .ses .e.hecha { color:var(--good); font-weight:600; }
+  .ses .t { font-weight:500; font-size:16px; }
+  .ses .m { font-size:13px; color:var(--ink-2); margin-top:2px; }
+  .ses .e { font-family:var(--mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:5px 9px; border-radius:999px; background:var(--track); color:var(--ink-2); white-space:nowrap; }
+  .ses .e.hecha { background:var(--pill); color:var(--on-pill); }
   .ses.saltada .t { text-decoration:line-through; color:var(--muted); }
-  .tipo { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-2); }
-  .vacio { color:var(--muted); font-size:13px; margin-top:6px; }
-  .copiar { width:100%; height:46px; border-radius:14px; border:1px dashed var(--hair); background:transparent; color:var(--ink-2); margin:6px 0 20px; }
+  .alerta { color:var(--crit); font-weight:500; }
+  .vacio { color:var(--muted); font-size:14px; margin-top:10px; }
+
+  /* Botón negro con flecha en círculo (C.Lab) */
+  .cta { display:inline-flex; align-items:center; gap:0; border:0; background:none; padding:0; margin:8px 0 26px; }
+  .cta span { height:50px; display:flex; align-items:center; padding:0 22px; border-radius:25px; background:var(--pill); color:var(--on-pill); font-weight:500; }
+  .cta i { width:50px; height:50px; border-radius:50%; background:var(--pill); color:var(--on-pill); display:grid; place-items:center; margin-left:-6px; font-style:normal; font-size:20px; }
+  .cta.full { display:flex; width:100%; }
+  .cta.full span { flex:1; justify-content:center; }
 
   /* Inventario */
-  .seccion { margin:18px 0 8px; display:flex; align-items:baseline; gap:8px; }
-  .seccion h2 { font-size:22px; text-transform:uppercase; }
-  .seccion span { color:var(--muted); font-size:13px; }
-  .tarjeta { background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:4px 12px; }
-  .item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--hair); }
-  .item:last-child { border-bottom:0; }
+  .seccion { margin:26px 2px 10px; display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .seccion h2 { font-size:30px; }
+  .lugar { position:relative; overflow:hidden; clip-path:inset(0 round var(--r)); padding:6px 18px 6px; margin-bottom:12px; }
+  .lugar .mancha { position:absolute; width:180px; height:180px; border-radius:50%; filter:blur(40px); opacity:.45; top:-70px; right:-50px; pointer-events:none; }
+  .lugar .cab { position:relative; display:flex; align-items:baseline; justify-content:space-between; padding:14px 0 6px; }
+  .lugar .cab h3 { font-family:var(--mono); font-size:13px; letter-spacing:.1em; text-transform:uppercase; font-weight:500; }
+  .item { position:relative; display:flex; align-items:center; gap:10px; padding:12px 0; border-top:1px solid var(--hair); }
   .item .n { flex:1; min-width:0; text-align:left; border:0; background:none; padding:0; }
-  .item .n b { font-weight:600; display:block; }
-  .item .n small { color:var(--muted); font-size:12px; }
+  .item .n b { font-weight:500; display:block; }
+  .item .n small { color:var(--muted); font-size:13px; display:block; }
+  .item .n small.alerta { color:var(--crit); }
   .item.no .n b { color:var(--muted); text-decoration:line-through; }
-  .toggle { height:30px; border-radius:15px; border:1px solid var(--hair); background:var(--surface-2); font-size:12px; padding:0 10px; white-space:nowrap; }
-  .toggle.si { background:var(--btn); color:var(--on-btn); border-color:transparent; }
-  .agregar { background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:12px; display:grid; gap:8px; }
+  .toggle { height:32px; border-radius:16px; border:1px solid var(--hair); background:var(--glass-2); font-size:12px; padding:0 12px; white-space:nowrap; }
+  .toggle.si { background:var(--pill); color:var(--on-pill); border-color:transparent; }
+  .agregar { padding:18px; display:grid; gap:10px; }
   .rapidos { display:flex; flex-wrap:wrap; gap:6px; }
-  .rapidos button { border:1px solid var(--hair); background:var(--surface-2); border-radius:999px; padding:5px 10px; font-size:13px; }
+  .rapidos button { border:1px solid var(--hair); background:var(--glass-2); border-radius:999px; padding:7px 13px; font-size:13px; }
   .fila { display:flex; gap:8px; }
   .fila > * { flex:1; min-width:0; }
-
-  input.c, select.c, textarea.c { width:100%; border-radius:12px; border:1px solid var(--hair); background:var(--surface); padding:10px 12px; }
-  input.c, select.c { min-height:44px; }
-  select.c, .foco select { -webkit-appearance:none; appearance:none; padding-right:30px;
-    background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237D7C77' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center; }
+  input.c, select.c, textarea.c { width:100%; min-height:48px; border-radius:var(--r-sm); border:1px solid var(--hair); background:var(--glass-2); padding:12px 14px; }
   textarea.c { min-height:120px; resize:vertical; line-height:1.45; }
-  .primario { height:46px; border-radius:14px; border:0; background:var(--btn); color:var(--on-btn); font-weight:600; padding:0 18px; }
-  .secundario { height:46px; border-radius:14px; border:1px solid var(--hair); background:var(--surface); padding:0 18px; }
-  .peligro { height:46px; border-radius:14px; border:0; background:transparent; color:var(--crit); padding:0 10px; }
+  select.c, .foco select { -webkit-appearance:none; appearance:none; padding-right:34px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%239A958D' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 14px center; }
+  .listado { padding:2px 18px; }
+  .listado .item:first-child { border-top:0; }
 
   /* Registro */
-  .grafica { background:var(--surface); border:1px solid var(--hair); border-radius:var(--r); padding:12px; position:relative; }
+  .grafica { padding:18px; position:relative; }
   .grafica svg { display:block; width:100%; height:auto; overflow:visible; }
-  .leyenda { display:flex; gap:14px; font-size:12px; color:var(--ink-2); margin-bottom:6px; }
-  .leyenda i { display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:-2px; margin-right:5px; }
-  .tip { position:absolute; pointer-events:none; background:var(--ink); color:var(--bg); font-size:12px; padding:6px 8px; border-radius:8px; white-space:nowrap; transform:translate(-50%, -110%); }
+  .leyenda { display:flex; gap:16px; margin:12px 0 8px; }
+  .leyenda span { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-2); }
+  .leyenda i { width:12px; height:12px; border-radius:4px; }
+  .tip { position:absolute; pointer-events:none; background:var(--pill); color:var(--on-pill); font-size:12px; padding:7px 10px; border-radius:10px; white-space:nowrap; transform:translate(-50%, -110%); }
   .tip[hidden] { display:none; }
-  .lista .item { align-items:flex-start; }
-  .alerta, .item .n small.alerta { color:var(--crit); font-weight:600; }
-  .item .n small.alerta { display:block; }
-  .nota { font-size:12px; color:var(--muted); margin-top:8px; }
+  .semestre { padding:18px; }
+  .ticks { display:flex; gap:2px; height:44px; align-items:stretch; margin-top:14px; }
+  .ticks i { flex:1; border-radius:1px; background:var(--track); }
+  .ticks i.plan { background:var(--muted); }
+  .ticks i.hecha { background:var(--ink); }
+  .ticks i.hoy { background:var(--accent); }
+  .ticks i.bq { box-shadow:0 -6px 0 -1px var(--accent); }
+  .semestre .pie { display:flex; justify-content:space-between; margin-top:10px; }
+  .nota { font-size:12px; color:var(--muted); margin:14px 2px; }
 
-  /* Barra de pestañas */
-  nav.tabs { position:fixed; left:0; right:0; bottom:0; background:var(--surface); border-top:1px solid var(--hair); display:flex; justify-content:center; padding:6px 8px calc(6px + env(safe-area-inset-bottom)); z-index:5; }
-  nav.tabs button { flex:1; max-width:200px; border:0; background:none; height:48px; border-radius:12px; font-family:var(--display); font-size:17px; font-weight:700; text-transform:uppercase; color:var(--muted); }
-  nav.tabs button[aria-selected="true"] { color:var(--ink); background:var(--surface-2); }
+  /* Barra de navegación: íconos en círculo */
+  nav.tabs { position:fixed; left:50%; transform:translateX(-50%); bottom:calc(14px + env(safe-area-inset-bottom)); display:flex; gap:14px; padding:8px; border-radius:40px; z-index:5; }
+  nav.tabs button { width:60px; height:60px; border-radius:50%; border:0; background:transparent; color:var(--muted); display:grid; place-items:center; }
+  nav.tabs button svg.i { width:24px; height:24px; }
+  nav.tabs button[aria-selected="true"] { color:var(--ink); background:var(--glass-2); box-shadow:inset 0 0 0 1.5px var(--ink); }
+  .oculto { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 
   /* Editor */
-  dialog { border:0; border-radius:20px; padding:0; width:min(560px, calc(100vw - 24px)); max-height:calc(100dvh - 24px); background:var(--surface); color:var(--ink); }
-  dialog::backdrop { background:rgba(0,0,0,.45); }
-  dialog form { padding:16px; display:grid; gap:10px; }
-  dialog h2 { font-size:24px; text-transform:uppercase; }
-  dialog label { font-size:12px; color:var(--ink-2); display:grid; gap:4px; }
-  .seg { display:flex; background:var(--surface-2); border-radius:12px; padding:3px; gap:3px; }
-  .seg button { flex:1; border:0; background:transparent; height:36px; border-radius:9px; font-size:13px; }
-  .seg button[aria-pressed="true"] { background:var(--surface); box-shadow:0 1px 3px rgba(0,0,0,.15); font-weight:600; }
+  dialog { border:0; border-radius:var(--r); padding:0; width:min(560px, calc(100vw - 20px)); max-height:calc(100dvh - 20px); background:var(--bg); color:var(--ink); box-shadow:0 20px 60px rgba(0,0,0,.25); }
+  dialog::backdrop { background:rgba(20,18,15,.35); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+  dialog form { padding:20px; display:grid; grid-template-columns:minmax(0, 1fr); gap:12px; }
+  dialog h2 { font-size:34px; margin-bottom:4px; }
+  dialog label { display:grid; gap:6px; }
+  dialog label > span:first-child, .lbl { font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2); }
+  .tipos { display:flex; gap:8px; overflow-x:auto; padding:4px 2px 8px; margin:0 -2px; scroll-snap-type:x mandatory; scrollbar-width:none; }
+  .tipos::-webkit-scrollbar { display:none; }
+  .tipos button { scroll-snap-align:center; flex:none; display:flex; flex-direction:column; align-items:center; gap:6px; border:0; background:none; padding:0; width:72px; font-size:12px; color:var(--muted); }
+  .tipos button .ic { width:56px; height:56px; border-radius:22px; display:grid; place-items:center; background:var(--glass-2); box-shadow:0 0 0 1px var(--hair); opacity:.7; }
+  .tipos button[aria-pressed="true"] { color:var(--ink); font-weight:500; }
+  .tipos button[aria-pressed="true"] .ic { opacity:1; box-shadow:0 0 0 2px currentColor; }
+  .seg { display:flex; background:var(--track); border-radius:999px; padding:4px; gap:4px; }
+  .seg button { flex:1; border:0; background:transparent; height:40px; border-radius:999px; font-size:14px; color:var(--ink-2); }
+  .seg button[aria-pressed="true"] { background:var(--pill); color:var(--on-pill); font-weight:500; }
   .impl { display:flex; flex-wrap:wrap; gap:6px; }
-  .impl label { display:flex; flex-direction:row; align-items:center; gap:6px; border:1px solid var(--hair); border-radius:999px; padding:5px 10px; font-size:13px; color:var(--ink); }
-  .acciones { display:flex; gap:8px; align-items:center; margin-top:4px; }
+  .impl label { display:flex; align-items:center; gap:6px; border:1px solid var(--hair); background:var(--glass-2); border-radius:999px; padding:7px 12px; font-size:13px; }
+  .impl input { accent-color:var(--accent); margin:0; }
+  .acciones { display:flex; gap:8px; align-items:center; margin-top:6px; }
   .acciones .esp { flex:1; }
-  .real { display:grid; gap:10px; border-top:1px solid var(--hair); padding-top:10px; }
+  .secundario { height:48px; border-radius:24px; border:1px solid var(--hair); background:var(--glass-2); padding:0 18px; }
+  .peligro { height:48px; border-radius:24px; border:0; background:transparent; color:var(--crit); padding:0 8px; }
+  .acciones .cta { margin:0; }
+  .acciones .cta i { display:none; }
+  .real { display:grid; gap:12px; border-top:1px solid var(--hair); padding-top:12px; }
   .real[hidden] { display:none; }
 
   /* Clave */
-  .clave { max-width:420px; margin:12vh auto 0; display:grid; gap:12px; }
+  .clave { max-width:420px; margin:14vh auto 0; padding:24px; display:grid; gap:14px; }
+  .clave h2 { font-size:40px; }
   .clave p { color:var(--ink-2); margin:0; }
   .err { color:var(--crit); font-size:13px; }
 </style>
 </head>
 <body>
+<div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-semana" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="4"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-inventario" viewBox="0 0 24 24"><path d="M6.5 7.5v9M3.5 9.5v5M17.5 7.5v9M20.5 9.5v5M6.5 12h11"/></symbol>
+  <symbol id="i-registro" viewBox="0 0 24 24"><path d="M5 20V12M10 20V6M15 20v-9M20 20V4"/></symbol>
+  <symbol id="i-Carrera" viewBox="0 0 24 24"><circle cx="14.5" cy="4.5" r="1.8"/><path d="M7 20.5l3.2-5.2 3.3 2.2v3.5M5.5 11.5l3-3.2 4.6.8 2 3.6 3.4 1.1M10.2 15.3l1.6-4.6"/></symbol>
+  <symbol id="i-Fuerza" viewBox="0 0 24 24"><path d="M6.5 7.5v9M3.5 9.5v5M17.5 7.5v9M20.5 9.5v5M6.5 12h11"/></symbol>
+  <symbol id="i-Estaciones" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 2M9.5 2.5h5M12 2.5V6"/></symbol>
+  <symbol id="i-Simulación" viewBox="0 0 24 24"><path d="M5.5 21V3.5M5.5 4h12l-2.5 4 2.5 4h-12"/></symbol>
+  <symbol id="i-Movilidad" viewBox="0 0 24 24"><path d="M3 12c2.5-5.5 5.5 5.5 9 0s6.5 5.5 9 0"/></symbol>
+  <symbol id="i-Otro" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18" cy="12" r="1.3"/></symbol>
+</svg>
+
 <main>
   <header class="top">
-    <h1>Entreno</h1>
-    <div class="estado" id="estado" role="status"><span id="estadoTxt">Cargando</span><i></i></div>
+    <span class="mono">Entreno · Daniel</span>
+    <div class="estado mono" id="estado" role="status"><span id="estadoTxt">Cargando</span><i></i></div>
   </header>
 
-  <section class="vista clave" id="vClave" hidden>
+  <section class="vista clave card" id="vClave" hidden>
     <h2>Falta la clave</h2>
     <p>Abre el link con clave que te pasó Atenea, o pégala aquí. Se guarda solo en este teléfono.</p>
     <input class="c" id="claveIn" type="password" autocomplete="off" placeholder="Clave">
-    <button class="primario" id="claveOk">Entrar</button>
+    <button class="cta full" id="claveOk"><span>Entrar</span><i>›</i></button>
     <div class="err" id="claveErr"></div>
   </section>
 
   <section class="vista" id="vSemana" hidden>
-    <div class="semnav">
-      <button class="ico" id="semPrev" aria-label="Semana anterior">‹</button>
-      <h2 id="semTitulo"></h2>
-      <button class="chip-btn" id="semHoy">Hoy</button>
-      <button class="ico" id="semNext" aria-label="Semana siguiente">›</button>
+    <div class="heroe">
+      <h1 id="semTitulo"></h1>
+      <div class="nav">
+        <button class="circ" id="semPrev" aria-label="Semana anterior">‹</button>
+        <button class="pildora" id="semHoy">Hoy</button>
+        <button class="circ" id="semNext" aria-label="Semana siguiente">›</button>
+      </div>
     </div>
-    <div class="stats" id="stats"></div>
+    <div class="tira" id="tira"></div>
+    <div class="grid" id="stats"></div>
     <div class="foco">
-      <input id="focoIn" placeholder="Foco de la semana (ej. base aeróbica, semana de parcial)">
+      <input id="focoIn" placeholder="Foco de la semana">
       <select id="metaIn" aria-label="Meta de sesiones">
         <option value="3">Meta 3</option><option value="4">Meta 4</option>
       </select>
     </div>
     <div id="dias"></div>
-    <button class="copiar" id="copiar">Copiar la semana anterior como punto de partida</button>
+    <button class="cta" id="copiar"><span>Copiar la semana anterior</span><i>›</i></button>
   </section>
 
   <section class="vista" id="vInventario" hidden>
-    <div class="seccion"><h2>Agregar</h2><span>lo que tienes o dónde entrenas</span></div>
-    <div class="agregar">
+    <div class="heroe"><h1>Inventario<span>lo que tienes y dónde</span></h1></div>
+    <div class="agregar card">
       <div class="rapidos" id="rapidos"></div>
       <input class="c" id="invNombre" placeholder="Qué es (ej. Kettlebell)">
       <div class="fila">
         <input class="c" id="invLugar" list="lugares" placeholder="Dónde">
-        <input class="c" id="invDetalle" placeholder="Detalle (ej. 16 kg, 2 pares)">
+        <input class="c" id="invDetalle" placeholder="Detalle (16 kg)">
       </div>
       <datalist id="lugares"></datalist>
-      <button class="primario" id="invAgregar">Agregar</button>
+      <button class="cta full" id="invAgregar" style="margin:4px 0 0"><span>Agregar</span><i>+</i></button>
     </div>
-    <div id="inventario"></div>
+    <div id="inventario" style="margin-top:12px"></div>
   </section>
 
   <section class="vista" id="vRegistro" hidden>
-    <div class="seccion"><h2>Carga semanal</h2><span>últimas 10 semanas</span></div>
-    <div class="grafica" id="grafica"></div>
-    <div class="seccion"><h2>Molestias</h2><span>lo que anotaste al terminar</span></div>
-    <div class="tarjeta lista" id="molestias"></div>
-    <div class="seccion"><h2>Hechas</h2><span>las últimas 12</span></div>
-    <div class="tarjeta lista" id="hechas"></div>
-    <div class="seccion"><h2>Fechas que pesan</h2><span>parciales y entregas</span></div>
-    <div class="tarjeta lista" id="bloqueos"></div>
-    <div class="agregar" style="margin-top:8px">
+    <div class="heroe"><h1>Registro<span>lo que de verdad pasó</span></h1></div>
+    <div class="grafica card" id="grafica"></div>
+    <div class="semestre card" id="semestre" style="margin-top:10px"></div>
+    <div class="seccion"><h2>Molestias</h2><span class="mono">al terminar</span></div>
+    <div class="card listado" id="molestias"></div>
+    <div class="seccion"><h2>Hechas</h2><span class="mono">últimas 12</span></div>
+    <div class="card listado" id="hechas"></div>
+    <div class="seccion"><h2>Fechas que pesan</h2><span class="mono">UCAB</span></div>
+    <div class="card listado" id="bloqueos"></div>
+    <div class="agregar card" style="margin-top:10px">
       <div class="fila">
         <input class="c" id="bqFecha" type="date">
-        <input class="c" id="bqMotivo" placeholder="Qué es (ej. Parcial Trading)">
+        <input class="c" id="bqMotivo" placeholder="Parcial Trading">
       </div>
       <button class="secundario" id="bqAgregar">Agregar fecha</button>
     </div>
-    <p class="nota">Carga = minutos × esfuerzo (RPE 1 a 10). El plan se dibuja como contorno y lo hecho relleno.</p>
+    <p class="nota">Carga = minutos × esfuerzo (RPE 1 a 10). En la gráfica, el plan es el contorno y lo hecho el relleno.</p>
   </section>
 </main>
 
-<nav class="tabs" id="tabs" hidden>
-  <button data-tab="Semana" aria-selected="true">Semana</button>
-  <button data-tab="Inventario" aria-selected="false">Inventario</button>
-  <button data-tab="Registro" aria-selected="false">Registro</button>
+<nav class="tabs card" id="tabs" hidden>
+  <button data-tab="Semana" aria-selected="true" title="Semana"><svg class="i"><use href="#i-semana"/></svg><span class="oculto">Semana</span></button>
+  <button data-tab="Inventario" aria-selected="false" title="Inventario"><svg class="i"><use href="#i-inventario"/></svg><span class="oculto">Inventario</span></button>
+  <button data-tab="Registro" aria-selected="false" title="Registro"><svg class="i"><use href="#i-registro"/></svg><span class="oculto">Registro</span></button>
 </nav>
 
 <dialog id="dlgSes">
   <form method="dialog" id="fSes">
     <h2 id="sesTit">Sesión</h2>
+    <div><div class="lbl">Tipo</div><div class="tipos" id="sesTipos"></div></div>
     <div class="fila">
-      <label>Día<input class="c" type="date" name="fecha" required></label>
-      <label>Tipo<select class="c" name="tipo"></select></label>
+      <label><span>Día</span><input class="c" type="date" name="fecha" required></label>
+      <label><span>Dónde</span><select class="c" name="lugar"></select></label>
     </div>
-    <label>Título<input class="c" name="titulo" placeholder="ej. Intervalos 6×800" required></label>
-    <label>Dónde<select class="c" name="lugar"></select></label>
-    <div><div style="font-size:12px;color:var(--ink-2);margin-bottom:4px">Con qué</div><div class="impl" id="sesImpl"></div></div>
-    <label>Qué vas a hacer<textarea class="c" name="contenido" placeholder="Tu sesión: bloques, series, ritmos, descansos"></textarea></label>
+    <label><span>Título</span><input class="c" name="titulo" placeholder="ej. Intervalos 6×800" required></label>
+    <div><div class="lbl" style="margin-bottom:6px">Con qué</div><div class="impl" id="sesImpl"></div></div>
+    <label><span>Qué vas a hacer</span><textarea class="c" name="contenido" placeholder="Tu sesión: bloques, series, ritmos, descansos"></textarea></label>
     <div class="fila">
-      <label>Minutos plan<input class="c" type="number" name="min_plan" min="0" inputmode="numeric"></label>
-      <label>RPE plan (1-10)<input class="c" type="number" name="rpe_plan" min="1" max="10" inputmode="numeric"></label>
+      <label><span>Minutos plan</span><input class="c" type="number" name="min_plan" min="0" inputmode="numeric"></label>
+      <label><span>RPE plan 1-10</span><input class="c" type="number" name="rpe_plan" min="1" max="10" inputmode="numeric"></label>
     </div>
     <div class="seg" id="sesEstado">
       <button type="button" data-v="Planeada">Planeada</button>
@@ -270,17 +367,17 @@
     </div>
     <div class="real" id="sesReal">
       <div class="fila">
-        <label>Minutos reales<input class="c" type="number" name="min_real" min="0" inputmode="numeric"></label>
-        <label>RPE real (1-10)<input class="c" type="number" name="rpe_real" min="1" max="10" inputmode="numeric"></label>
+        <label><span>Minutos reales</span><input class="c" type="number" name="min_real" min="0" inputmode="numeric"></label>
+        <label><span>RPE real 1-10</span><input class="c" type="number" name="rpe_real" min="1" max="10" inputmode="numeric"></label>
       </div>
-      <label>Molestia (zona y qué sentiste; vacío si nada)<input class="c" name="molestia"></label>
+      <label><span>Molestia (zona y qué sentiste)</span><input class="c" name="molestia" placeholder="Vacío si nada"></label>
     </div>
-    <label>Nota<input class="c" name="nota"></label>
+    <label><span>Nota</span><input class="c" name="nota"></label>
     <div class="acciones">
       <button type="button" class="peligro" id="sesBorrar">Borrar</button>
       <span class="esp"></span>
       <button type="button" class="secundario" id="sesCancelar">Cancelar</button>
-      <button type="submit" class="primario">Guardar</button>
+      <button type="submit" class="cta"><span>Guardar</span><i>›</i></button>
     </div>
   </form>
 </dialog>
@@ -288,15 +385,15 @@
 <dialog id="dlgInv">
   <form method="dialog" id="fInv">
     <h2>Editar</h2>
-    <label>Qué es<input class="c" name="nombre" required></label>
-    <label>Dónde<input class="c" name="lugar" list="lugares" required></label>
-    <label>Detalle<input class="c" name="detalle"></label>
-    <label>Nota<input class="c" name="nota"></label>
+    <label><span>Qué es</span><input class="c" name="nombre" required></label>
+    <label><span>Dónde</span><input class="c" name="lugar" list="lugares" required></label>
+    <label><span>Detalle</span><input class="c" name="detalle"></label>
+    <label><span>Nota</span><input class="c" name="nota"></label>
     <div class="acciones">
       <button type="button" class="peligro" id="invBorrar">Borrar</button>
       <span class="esp"></span>
       <button type="button" class="secundario" id="invCancelar">Cancelar</button>
-      <button type="submit" class="primario">Guardar</button>
+      <button type="submit" class="cta"><span>Guardar</span><i>›</i></button>
     </div>
   </form>
 </dialog>
@@ -308,16 +405,19 @@
   var K_CLAVE = "entreno.clave", K_DATOS = "entreno.datos", K_COLA = "entreno.cola";
   var HOJAS = ["Sesiones", "Inventario", "Semanas", "Bloqueos", "Horario"];
   var TIPOS = ["Carrera", "Fuerza", "Estaciones", "Simulación", "Movilidad", "Otro"];
-  var LUGARES_BASE = ["Casa", "Parque o calle", "Pista", "Ávila", "El Volcán"];
+  var LUGARES_BASE = ["Casa", "Plaza cerca de casa", "Parque o calle", "Pista", "Ávila", "El Volcán"];
   var RAPIDOS = ["Kettlebell", "Mancuernas", "Balón medicinal", "Chaleco con peso", "Saco de arena",
                  "Banda elástica", "Cuerda para saltar", "Barra de dominadas", "Cajón o escalón", "Colchoneta"];
   var DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
   var MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  var SEMESTRE = ["2026-09-14", "2027-01-09"];   // UCAB 202715
 
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]; }); };
   var num = function (v) { var n = parseFloat(v); return isFinite(n) ? n : 0; };
+  var miles = function (n) { return Math.round(n).toLocaleString("es-VE"); };
   var nid = function () { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); };
+  var icono = function (n) { return '<svg class="i"><use href="#i-' + n + '"/></svg>'; };
   var ls = {
     get: function (k, def) { try { var v = localStorage.getItem(k); return v == null ? def : JSON.parse(v); } catch (e) { return def; } },
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
@@ -354,7 +454,7 @@
   var borrar = function (hoja, id) { cambiar([{ a:"borrar", hoja:hoja, id:id }]); };
 
   // ---------- Red ----------
-  function estado(txt, cls) { $("estadoTxt").textContent = txt; $("estado").className = "estado " + (cls || ""); }
+  function estado(txt, cls) { $("estadoTxt").textContent = txt; $("estado").className = "estado mono " + (cls || ""); }
   var subiendo = false;
   function subir() {
     if (subiendo || !cola.length || !clave) { if (!cola.length) estado("Al día"); return; }
@@ -371,7 +471,7 @@
       })
       .catch(function (e) {
         subiendo = false;
-        estado("Sin conexión · " + cola.length + " por subir", "pend");
+        estado("Sin señal · " + cola.length + " por subir", "pend");
         if (String(e.message).indexOf("autorizado") >= 0) pedirClave("La clave no es válida.");
       });
   }
@@ -388,14 +488,15 @@
       })
       .catch(function (e) {
         if (String(e.message).indexOf("autorizado") >= 0) return pedirClave("La clave no es válida.");
-        estado(cola.length ? "Sin conexión · " + cola.length + " por subir" : "Sin conexión · datos guardados en el teléfono", "pend");
+        estado(cola.length ? "Sin señal · " + cola.length + " por subir" : "Sin señal · guardado aquí", "pend");
       });
   }
 
   // ---------- Cálculos ----------
-  function sesionesSemana(lun) {
-    var fin = suma(lun, 6);
-    return datos.Sesiones.filter(function (s) { return s.fecha >= lun && s.fecha <= fin; });
+  function sesionesEntre(a, b) { return datos.Sesiones.filter(function (s) { return s.fecha >= a && s.fecha <= b; }); }
+  function sesionesSemana(lun) { return sesionesEntre(lun, suma(lun, 6)); }
+  function cargaSes(s) {
+    return s.estado === "Hecha" ? num(s.min_real || s.min_plan) * num(s.rpe_real || s.rpe_plan) : num(s.min_plan) * num(s.rpe_plan);
   }
   function carga(lista) {
     var plan = 0, hecho = 0, min = 0, nHechas = 0, nPlan = 0;
@@ -404,7 +505,7 @@
       nPlan++;
       plan += num(s.min_plan) * num(s.rpe_plan);
       min += num(s.min_plan);
-      if (s.estado === "Hecha") { nHechas++; hecho += num(s.min_real || s.min_plan) * num(s.rpe_real || s.rpe_plan); }
+      if (s.estado === "Hecha") { nHechas++; hecho += cargaSes(s); }
     });
     return { plan:plan, hecho:hecho, min:min, nHechas:nHechas, nPlan:nPlan };
   }
@@ -414,21 +515,58 @@
     return set;
   }
   function colorTipo(t) { var i = TIPOS.indexOf(t); return "var(--t" + ((i < 0 ? 5 : i) + 1) + ")"; }
+  function icTipo(t, tam) {
+    var c = colorTipo(t);
+    return '<span class="ic" style="color:' + c + ";background:color-mix(in srgb, " + c + ' 15%, transparent)">' + icono(TIPOS.indexOf(t) < 0 ? "Otro" : t) + "</span>";
+  }
 
   // ---------- Pintar: Semana ----------
   function pintarSemana() {
-    var fin = suma(semana, 6);
-    $("semTitulo").textContent = corta(semana) + " al " + corta(fin);
+    var fin = suma(semana, 6), pS = parse(semana), pF = parse(fin);
+    $("semTitulo").innerHTML = (semana === lunes(HOY) ? "Esta semana" : "Semana") +
+      "<span>" + pS.getDate() + (pS.getMonth() !== pF.getMonth() ? " " + MESES[pS.getMonth()] : "") + " al " + corta(fin) + "</span>";
     var lista = sesionesSemana(semana);
     var c = carga(lista), cAnt = carga(sesionesSemana(suma(semana, -7)));
     var sem = datos.Semanas.find(function (s) { return s.id === semana; }) || {};
     var meta = num(sem.meta) || 4;
+
+    // Tira de días
+    var porDia = [], maxDia = 1;
+    $("tira").innerHTML = DIAS.map(function (n, d) {
+      var f = suma(semana, d);
+      var ses = lista.filter(function (s) { return s.fecha === f && s.estado !== "Saltada"; });
+      var hecha = ses.some(function (s) { return s.estado === "Hecha"; });
+      var cl = f === HOY ? "hoy" : hecha ? "hecha" : ses.length ? "plan" : "";
+      if (datos.Bloqueos.some(function (b) { return b.fecha === f; })) cl += " bq";
+      var cg = ses.reduce(function (a, s) { return a + cargaSes(s); }, 0);
+      porDia.push({ cg:cg, hecha:hecha, hoy:f === HOY }); maxDia = Math.max(maxDia, cg);
+      return '<div><div class="l">' + n.charAt(0) + '</div><button class="' + cl + '" data-ir="' + f + '" aria-label="' + n + " " + corta(f) + '">' + parse(f).getDate() + "</button></div>";
+    }).join("");
+
+    // Números
     var delta = cAnt.plan ? Math.round((c.plan - cAnt.plan) / cAnt.plan * 100) : null;
+    var R = 46, C = 2 * Math.PI * R, prog = Math.min(1, c.nHechas / meta);
+    var barras = porDia.map(function (p, d) {
+      var h = Math.round(p.cg / maxDia * 100);
+      return '<div class="col"><div class="pista">' + (h ? '<i class="' + (p.hoy ? "hoy" : p.hecha ? "hecha" : "") + '" style="height:' + h + '%"></i>' : "") +
+        '</div><span>' + DIAS[d].charAt(0) + "</span></div>";
+    }).join("");
+    var rel = function (v, max) { return Math.min(100, max ? Math.round(v / max * 100) : 0); };
     $("stats").innerHTML =
-      '<div class="stat"><b>' + c.nHechas + "/" + c.nPlan + '</b><span>hechas / planeadas · meta ' + meta + "</span></div>" +
-      '<div class="stat"><b>' + c.min + '</b><span>minutos planeados</span></div>' +
-      '<div class="stat"><b>' + c.plan + '</b><span>carga plan' + (delta === null ? "" : ' · <small>' + (delta > 0 ? "+" : "") + delta + "% vs anterior</small>") + "</span></div>" +
-      '<div class="stat"><b>' + c.hecho + '</b><span>carga hecha</span></div>';
+      '<div class="card kpi ancha"><div class="izq"><span class="mono">Carga hecha</span>' +
+        '<div class="big">' + miles(c.hecho) + "<small>de " + miles(c.plan) + "</small></div>" +
+        '<div class="delta">' + (delta === null ? "Sin semana anterior para comparar" : "Plan vs semana anterior <b>" + (delta > 0 ? "+" : "") + delta + "% " + (delta > 0 ? "↑" : delta < 0 ? "↓" : "") + "</b>") + "</div></div>" +
+        '<div class="barras" aria-hidden="true">' + barras + "</div></div>" +
+      '<div class="card anillo"><span class="mono">Sesiones</span>' +
+        '<svg viewBox="0 0 112 112" role="img" aria-label="' + c.nHechas + " de " + meta + ' sesiones"><circle cx="56" cy="56" r="' + R + '" fill="none" stroke="var(--track)" stroke-width="10"/>' +
+        (prog ? '<circle cx="56" cy="56" r="' + R + '" fill="none" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" stroke-dasharray="' + (C * prog) + " " + C + '" transform="rotate(-90 56 56)"/>' : "") +
+        '<text x="56" y="63" text-anchor="middle" font-size="24" font-weight="500" fill="var(--ink)" font-family="DM Sans, sans-serif">' + c.nHechas + "/" + meta + "</text></svg>" +
+        '<div class="sub"><b>' + c.nPlan + "</b> planeadas</div></div>" +
+      '<div class="card lineas">' +
+        '<div class="linea"><div class="fila"><span class="mono">Minutos</span><span class="v">' + c.min + "</span></div><div class=\"riel\"><i style=\"width:" + rel(c.min, Math.max(c.min, carga(sesionesSemana(suma(semana, -7))).min, 1)) + '%"></i></div></div>' +
+        '<div class="linea"><div class="fila"><span class="mono">Carga plan</span><span class="v">' + miles(c.plan) + "</span></div><div class=\"riel\"><i style=\"width:" + rel(c.plan, Math.max(c.plan, cAnt.plan, 1)) + '%"></i></div></div>' +
+        '<div class="linea"><div class="fila"><span class="mono">Anterior</span><span class="v">' + miles(cAnt.plan) + "</span></div><div class=\"riel\"><i style=\"width:" + rel(cAnt.plan, Math.max(c.plan, cAnt.plan, 1)) + '%;background:var(--muted)"></i></div></div>' +
+      "</div>";
     if (document.activeElement !== $("focoIn")) $("focoIn").value = sem.foco || "";
     $("metaIn").value = String(meta);
 
@@ -438,10 +576,10 @@
       var clases = datos.Horario.filter(function (h) { return num(h.dia) === d + 1 && (!h.hasta || f <= h.hasta); });
       var bqs = datos.Bloqueos.filter(function (b) { return b.fecha === f; });
       var ses = lista.filter(function (s) { return s.fecha === f; }).sort(function (a, b) { return String(a.actualizado).localeCompare(String(b.actualizado)); });
-      html += '<div class="dia' + (f === HOY ? " hoy" : "") + '">' +
-        '<div class="dia-cab"><h3>' + DIAS[d] + '</h3><span class="fecha">' + corta(f) + '</span>' +
-        '<button class="mas" data-nueva="' + f + '">+ Sesión</button></div>' +
-        clases.map(function (h) { return '<div class="clase">' + esc(h.texto) + "</div>"; }).join("") +
+      html += '<div class="dia card' + (f === HOY ? " hoy" : "") + '" id="d-' + f + '">' +
+        '<div class="dia-cab"><h3>' + DIAS[d].slice(0, 3) + "<span>" + parse(f).getDate() + "</span></h3>" +
+        '<button class="circ" data-nueva="' + f + '" aria-label="Agregar sesión el ' + DIAS[d] + '">+</button></div>' +
+        clases.map(function (h) { return '<div class="clase mono">' + esc(h.texto) + "</div>"; }).join("") +
         bqs.map(function (b) { return '<span class="bloqueo">' + esc(b.motivo) + "</span> "; }).join("") +
         (ses.length ? ses.map(tarjetaSesion).join("") : '<div class="vacio">Descanso o sin plan</div>') +
         "</div>";
@@ -451,22 +589,23 @@
   }
   function tarjetaSesion(s) {
     var meta = [s.lugar, s.min_plan ? s.min_plan + " min" : "", s.rpe_plan ? "RPE " + s.rpe_plan : ""].filter(Boolean).join(" · ");
-    var e = s.estado === "Hecha" ? '<span class="e hecha">✓ Hecha</span>' : s.estado === "Saltada" ? '<span class="e">Saltada</span>' : '<span class="e">Planeada</span>';
-    return '<button class="ses' + (s.estado === "Saltada" ? " saltada" : "") + '" data-ses="' + esc(s.id) + '">' +
-      '<span class="barra" style="background:' + colorTipo(s.tipo) + '"></span>' +
-      '<span class="cuerpo"><span class="tipo">' + esc(s.tipo) + '</span><div class="t">' + esc(s.titulo) + "</div>" +
-      '<div class="m">' + esc(meta) + (s.molestia ? ' · <span class="alerta">⚠ ' + esc(s.molestia) + "</span>" : "") + "</div></span>" + e + "</button>";
+    var e = s.estado === "Hecha" ? '<span class="e hecha">Hecha</span>' : s.estado === "Saltada" ? '<span class="e">Saltada</span>' : '<span class="e">Plan</span>';
+    return '<button class="ses' + (s.estado === "Saltada" ? " saltada" : "") + '" data-ses="' + esc(s.id) + '">' + icTipo(s.tipo) +
+      '<span class="cuerpo"><div class="t">' + esc(s.titulo) + "</div>" +
+      '<div class="m">' + esc(s.tipo) + " · " + esc(meta) + "</div>" + (s.molestia ? '<div class="m alerta">⚠ ' + esc(s.molestia) + "</div>" : "") + "</span>" + e + "</button>";
   }
 
   // ---------- Pintar: Inventario ----------
+  var MANCHAS = ["var(--blob1)", "var(--blob2)", "var(--blob3)", "var(--t5)", "var(--t3)", "var(--t4)"];
   function pintarInventario() {
     $("rapidos").innerHTML = RAPIDOS.map(function (r) { return '<button type="button" data-rapido="' + esc(r) + '">' + esc(r) + "</button>"; }).join("");
     $("lugares").innerHTML = lugares().map(function (l) { return '<option value="' + esc(l) + '">'; }).join("");
-    $("inventario").innerHTML = lugares().map(function (l) {
+    $("inventario").innerHTML = lugares().map(function (l, k) {
       var items = datos.Inventario.filter(function (i) { return i.lugar === l; });
       if (!items.length) return "";
-      return '<div class="seccion"><h2>' + esc(l) + '</h2><span>' + items.length + "</span></div>" +
-        '<div class="tarjeta">' + items.map(function (i) {
+      return '<div class="lugar card"><span class="mancha" style="background:' + MANCHAS[k % MANCHAS.length] + '"></span>' +
+        '<div class="cab"><h3>' + esc(l) + '</h3><span class="mono">' + items.length + "</span></div>" +
+        items.map(function (i) {
           var si = i.disponible !== "NO";
           return '<div class="item' + (si ? "" : " no") + '"><button class="n" data-inv="' + esc(i.id) + '"><b>' + esc(i.nombre) + "</b>" +
             "<small>" + esc([i.detalle, i.nota].filter(Boolean).join(" · ")) + "</small></button>" +
@@ -480,36 +619,56 @@
     var base = lunes(HOY), semanas = [];
     for (var k = 9; k >= 0; k--) { var l = suma(base, -7 * k); semanas.push({ l:l, c:carga(sesionesSemana(l)) }); }
     var max = Math.max.apply(null, semanas.map(function (s) { return Math.max(s.c.plan, s.c.hecho); }).concat([1]));
-    var W = 600, H = 200, pl = 38, pb = 24, pt = 8, bw = (W - pl) / 10;
+    var W = 600, H = 210, pl = 40, pb = 26, pt = 8, bw = (W - pl) / 10;
     var y = function (v) { return pt + (H - pt - pb) * (1 - v / max); };
     var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Carga semanal plan y hecho, últimas 10 semanas">';
     [0, .5, 1].forEach(function (t) {
       var v = Math.round(max * t);
       svg += '<line x1="' + pl + '" x2="' + W + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--hair)" />' +
-        '<text x="' + (pl - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end" font-size="11" fill="var(--muted)">' + v + "</text>";
+        '<text x="' + (pl - 8) + '" y="' + (y(v) + 4) + '" text-anchor="end" font-size="11" font-family="DM Mono, monospace" fill="var(--muted)">' + miles(v) + "</text>";
     });
     semanas.forEach(function (s, i) {
-      var x = pl + i * bw + bw * .2, w = bw * .6;
-      var hp = Math.max(0, (H - pb) - y(s.c.plan)), hh = Math.max(0, (H - pb) - y(s.c.hecho));
-      if (s.c.plan) svg += '<rect x="' + (x + 1) + '" y="' + (y(s.c.plan) + 1) + '" width="' + (w - 2) + '" height="' + Math.max(0, hp - 1) + '" rx="4" fill="none" stroke="var(--t1)" stroke-width="2" />';
-      if (s.c.hecho) svg += '<rect x="' + (x + 4) + '" y="' + y(s.c.hecho) + '" width="' + (w - 8) + '" height="' + hh + '" rx="4" fill="var(--t1)" />';
-      svg += '<text x="' + (x + w / 2) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="11" fill="' + (s.l === base ? "var(--ink)" : "var(--muted)") + '">' + corta(s.l) + "</text>" +
+      var x = pl + i * bw + bw * .22, w = bw * .56, actual = s.l === base;
+      var col = actual ? "var(--accent)" : "var(--ink)";
+      svg += '<rect x="' + x + '" y="' + pt + '" width="' + w + '" height="' + (H - pb - pt) + '" rx="' + (w / 2) + '" fill="var(--track)" opacity=".6" />';
+      if (s.c.plan) svg += '<rect x="' + (x + 1) + '" y="' + (y(s.c.plan) + 1) + '" width="' + (w - 2) + '" height="' + Math.max(0, H - pb - y(s.c.plan) - 1) + '" rx="' + Math.min(8, w / 2) + '" fill="none" stroke="' + col + '" stroke-width="2" />';
+      if (s.c.hecho) svg += '<rect x="' + (x + 5) + '" y="' + y(s.c.hecho) + '" width="' + (w - 10) + '" height="' + Math.max(0, H - pb - y(s.c.hecho)) + '" rx="' + Math.min(6, (w - 10) / 2) + '" fill="' + col + '" />';
+      svg += '<text x="' + (x + w / 2) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="10" font-family="DM Mono, monospace" fill="' + (actual ? "var(--ink)" : "var(--muted)") + '">' + corta(s.l) + "</text>" +
         '<rect x="' + (pl + i * bw) + '" y="0" width="' + bw + '" height="' + H + '" fill="transparent" data-i="' + i + '" />';
     });
     svg += "</svg>";
-    $("grafica").innerHTML = '<div class="leyenda"><span><i style="border:2px solid var(--t1)"></i>Plan</span><span><i style="background:var(--t1)"></i>Hecho</span></div>' + svg + '<div class="tip" hidden></div>';
+    $("grafica").innerHTML = '<span class="mono">Carga semanal · 10 semanas</span>' +
+      '<div class="leyenda"><span><i style="box-shadow:inset 0 0 0 2px var(--ink)"></i>Plan</span><span><i style="background:var(--ink)"></i>Hecho</span><span><i style="background:var(--accent)"></i>Esta semana</span></div>' +
+      svg + '<div class="tip" hidden></div>';
     var tip = $("grafica").querySelector(".tip");
     $("grafica").querySelectorAll("rect[data-i]").forEach(function (r) {
       var mostrar = function () {
         var s = semanas[+r.dataset.i], box = $("grafica").getBoundingClientRect(), rb = r.getBoundingClientRect();
-        tip.innerHTML = "Semana del " + corta(s.l) + "<br>Plan " + s.c.plan + " · Hecho " + s.c.hecho + " · " + s.c.nHechas + "/" + s.c.nPlan + " sesiones";
-        tip.style.left = Math.min(Math.max(rb.left - box.left + rb.width / 2, 90), box.width - 90) + "px";
-        tip.style.top = (rb.top - box.top + 40) + "px";
+        tip.innerHTML = "Semana del " + corta(s.l) + "<br>Plan " + miles(s.c.plan) + " · Hecho " + miles(s.c.hecho) + " · " + s.c.nHechas + "/" + s.c.nPlan + " sesiones";
+        tip.style.left = Math.min(Math.max(rb.left - box.left + rb.width / 2, 100), box.width - 100) + "px";
+        tip.style.top = (rb.top - box.top + 70) + "px";
         tip.hidden = false;
       };
       r.addEventListener("mouseenter", mostrar); r.addEventListener("click", mostrar);
       r.addEventListener("mouseleave", function () { tip.hidden = true; });
     });
+
+    // Semestre: una rayita por día (referencia "Today")
+    var ticks = "", f = SEMESTRE[0], nHechas = 0, nDias = 0, nRest = 0;
+    while (f <= SEMESTRE[1]) {
+      var ses = datos.Sesiones.filter(function (s) { return s.fecha === f && s.estado !== "Saltada"; });
+      var hecha = ses.some(function (s) { return s.estado === "Hecha"; });
+      var cl = f === HOY ? "hoy" : hecha ? "hecha" : ses.length ? "plan" : "";
+      if (datos.Bloqueos.some(function (b) { return b.fecha === f; })) cl += " bq";
+      if (hecha) nHechas++;
+      if (f > HOY) nRest++;
+      nDias++;
+      ticks += '<i class="' + cl + '" title="' + corta(f) + '"></i>';
+      f = suma(f, 1);
+    }
+    $("semestre").innerHTML = '<div class="fila" style="justify-content:space-between;display:flex"><span class="mono">Semestre UCAB</span><span class="mono">' + nRest + " días al cierre</span></div>" +
+      '<div class="ticks" role="img" aria-label="' + nHechas + " días entrenados de " + nDias + ' del semestre">' + ticks + "</div>" +
+      '<div class="pie"><span class="mono">' + corta(SEMESTRE[0]) + '</span><span class="mono" style="color:var(--ink)">' + nHechas + ' días entrenados</span><span class="mono">' + corta(SEMESTRE[1]) + "</span></div>";
 
     var orden = function (a, b) { return b.fecha.localeCompare(a.fecha); };
     var fila = function (s, extra) {
@@ -520,7 +679,7 @@
     $("molestias").innerHTML = mol.length ? mol.map(function (s) { return fila(s, '<small class="alerta">⚠ ' + esc(s.molestia) + "</small>"); }).join("") : '<div class="item vacio">Ninguna anotada</div>';
     var hechas = datos.Sesiones.filter(function (s) { return s.estado === "Hecha"; }).sort(orden).slice(0, 12);
     $("hechas").innerHTML = hechas.length ? hechas.map(function (s) {
-      return fila(s, "<small> · " + esc((s.min_real || s.min_plan || "?") + " min · RPE " + (s.rpe_real || s.rpe_plan || "?")) + "</small>");
+      return fila(s, "<small>" + esc((s.min_real || s.min_plan || "?") + " min · RPE " + (s.rpe_real || s.rpe_plan || "?")) + "</small>");
     }).join("") : '<div class="item vacio">Todavía nada registrado</div>';
     var bqs = datos.Bloqueos.slice().sort(function (a, b) { return a.fecha.localeCompare(b.fecha); });
     $("bloqueos").innerHTML = bqs.length ? bqs.map(function (b) {
@@ -537,30 +696,43 @@
   }
 
   // ---------- Editor de sesión ----------
-  var fS = $("fSes"), editando = null, estadoSes = "Planeada";
-  fS.tipo.innerHTML = TIPOS.map(function (t) { return "<option>" + t + "</option>"; }).join("");
+  var fS = $("fSes"), editando = null, estadoSes = "Planeada", tipoSes = "Carrera";
+  $("sesTipos").innerHTML = TIPOS.map(function (t) {
+    return '<button type="button" data-t="' + t + '" style="--c:' + colorTipo(t) + '">' + icTipo(t) + "<span>" + t + "</span></button>";
+  }).join("");
+  function ponerTipo(t) {
+    tipoSes = t;
+    $("sesTipos").querySelectorAll("button").forEach(function (b) {
+      var on = b.dataset.t === t;
+      b.setAttribute("aria-pressed", String(on));
+      if (on) b.scrollIntoView({ block:"nearest", inline:"center" });
+    });
+  }
   function pintarImpl(marcados) {
     var items = datos.Inventario.filter(function (i) { return i.lugar === fS.lugar.value && i.disponible !== "NO"; });
     $("sesImpl").innerHTML = items.length ? items.map(function (i) {
       return '<label><input type="checkbox" value="' + esc(i.nombre) + '"' + (marcados.indexOf(i.nombre) >= 0 ? " checked" : "") + ">" + esc(i.nombre) + "</label>";
-    }).join("") : '<span class="vacio">Nada cargado en este lugar. Agrégalo en Inventario.</span>';
+    }).join("") : '<span class="vacio" style="margin:0">Nada cargado en este lugar. Agrégalo en Inventario.</span>';
   }
   function ponerEstado(v) {
     estadoSes = v;
     $("sesEstado").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.v === v)); });
     $("sesReal").hidden = v !== "Hecha";
   }
+  var CAMPOS = ["fecha", "titulo", "lugar", "contenido", "min_plan", "rpe_plan", "min_real", "rpe_real", "molestia", "nota"];
   function abrirSesion(s) {
     editando = s;
     fS.reset();
     fS.lugar.innerHTML = lugares().map(function (l) { return "<option>" + esc(l) + "</option>"; }).join("");
-    ["fecha", "tipo", "titulo", "lugar", "contenido", "min_plan", "rpe_plan", "min_real", "rpe_real", "molestia", "nota"].forEach(function (k) { if (s[k] != null && s[k] !== "") fS[k].value = s[k]; });
+    CAMPOS.forEach(function (k) { if (s[k] != null && s[k] !== "") fS[k].value = s[k]; });
     pintarImpl(String(s.implementos || "").split(" · ").filter(Boolean));
     ponerEstado(s.estado || "Planeada");
     $("sesTit").textContent = s.id ? "Editar sesión" : "Nueva sesión";
     $("sesBorrar").hidden = !s.id;
     $("dlgSes").showModal();
+    ponerTipo(TIPOS.indexOf(s.tipo) >= 0 ? s.tipo : "Otro");
   }
+  $("sesTipos").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) ponerTipo(b.dataset.t); });
   fS.lugar.addEventListener("change", function () { pintarImpl([]); });
   $("sesEstado").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) ponerEstado(b.dataset.v); });
   $("sesCancelar").onclick = function () { $("dlgSes").close(); };
@@ -569,8 +741,9 @@
   };
   fS.addEventListener("submit", function () {
     var f = {};
-    ["fecha", "tipo", "titulo", "lugar", "contenido", "min_plan", "rpe_plan", "min_real", "rpe_real", "molestia", "nota"].forEach(function (k) { f[k] = fS[k].value.trim(); });
+    CAMPOS.forEach(function (k) { f[k] = fS[k].value.trim(); });
     f.id = editando.id || nid();
+    f.tipo = tipoSes;
     f.estado = estadoSes;
     f.implementos = Array.prototype.map.call($("sesImpl").querySelectorAll("input:checked"), function (c) { return c.value; }).join(" · ");
     if (estadoSes !== "Hecha") { f.min_real = ""; f.rpe_real = ""; }
@@ -595,9 +768,10 @@
 
   // ---------- Eventos ----------
   document.addEventListener("click", function (e) {
-    var t = e.target.closest("[data-nueva],[data-ses],[data-inv],[data-disp],[data-rapido],[data-bq]");
+    var t = e.target.closest("[data-nueva],[data-ses],[data-inv],[data-disp],[data-rapido],[data-bq],[data-ir]");
     if (!t) return;
     if (t.dataset.nueva) abrirSesion({ fecha:t.dataset.nueva, tipo:"Carrera", lugar:"Parque o calle", estado:"Planeada" });
+    else if (t.dataset.ir) { var el = $("d-" + t.dataset.ir); if (el) el.scrollIntoView({ behavior:"smooth", block:"start" }); }
     else if (t.dataset.ses) { var s = datos.Sesiones.find(function (x) { return x.id === t.dataset.ses; }); if (s) abrirSesion(s); }
     else if (t.dataset.inv) { var i = datos.Inventario.find(function (x) { return x.id === t.dataset.inv; }); if (i) abrirInv(i); }
     else if (t.dataset.disp) {
