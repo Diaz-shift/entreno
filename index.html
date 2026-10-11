@@ -564,7 +564,7 @@
         '<div class="sub"><b>' + c.nPlan + "</b> planeadas</div></div>" +
       '<div class="card lineas">' +
         '<div class="linea"><div class="fila"><span class="mono">Minutos</span><span class="v">' + c.min + "</span></div><div class=\"riel\"><i style=\"width:" + rel(c.min, Math.max(c.min, carga(sesionesSemana(suma(semana, -7))).min, 1)) + '%"></i></div></div>' +
-        '<div class="linea"><div class="fila"><span class="mono">Carga plan</span><span class="v">' + miles(c.plan) + "</span></div><div class=\"riel\"><i style=\"width:" + rel(c.plan, Math.max(c.plan, cAnt.plan, 1)) + '%"></i></div></div>' +
+        '<div class="linea"><div class="fila"><span class="mono">Plan</span><span class="v">' + miles(c.plan) + "</span></div><div class=\"riel\"><i style=\"width:" + rel(c.plan, Math.max(c.plan, cAnt.plan, 1)) + '%"></i></div></div>' +
         '<div class="linea"><div class="fila"><span class="mono">Anterior</span><span class="v">' + miles(cAnt.plan) + "</span></div><div class=\"riel\"><i style=\"width:" + rel(cAnt.plan, Math.max(c.plan, cAnt.plan, 1)) + '%;background:var(--muted)"></i></div></div>' +
       "</div>";
     if (document.activeElement !== $("focoIn")) $("focoIn").value = sem.foco || "";
