@@ -5,15 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Entreno">
+<meta name="apple-mobile-web-app-title" content="Hércules">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#EFECE6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151412" media="(prefers-color-scheme: dark)">
-<title>Entreno</title>
+<title>Hércules</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300..700&display=swap">
 <style>
-  /* Página de entrenamiento de Daniel. Datos en su Google Sheet "Entrenamiento" vía Apps Script.
+  /* Hércules: página de entrenamiento de Daniel. Datos en su Google Sheet "Entrenamiento" vía Apps Script.
      Él diseña las sesiones; la página organiza semana, carga y registro.
      Estética (referencias de Daniel, 11 oct 2026): crema cálido, tarjetas de vidrio sobre manchas
      difusas, píldoras negras, naranja solo para "hoy" y lo que pide atención, etiquetas en mono.
@@ -270,7 +274,7 @@
 
 <main>
   <header class="top">
-    <span class="mono">Entreno · Daniel</span>
+    <span class="mono">Hércules · Daniel</span>
     <div class="estado mono" id="estado" role="status"><span id="estadoTxt">Cargando</span><i></i></div>
   </header>
 
@@ -839,7 +843,9 @@
   $("claveOk").onclick = function () { var k = $("claveIn").value.trim(); if (k) entrar(k); };
 
   var m = location.hash.match(/k=([^&]+)/);
-  if (m) { ls.set(K_CLAVE, decodeURIComponent(m[1])); history.replaceState(null, "", location.pathname); }
+  // La clave se queda en el link a propósito: el ícono de la pantalla de inicio guarda la URL tal cual
+  // y en iPhone esa app no comparte almacenamiento con Safari.
+  if (m) ls.set(K_CLAVE, decodeURIComponent(m[1]));
   var guardada = ls.get(K_CLAVE, null);
   if (guardada) entrar(guardada); else pedirClave();
 })();
